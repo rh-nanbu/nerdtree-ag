@@ -35,5 +35,12 @@ function! NERDTreeAg()
         echo 'Maybe another time...'
         return
     endif
-    exec "Ag! ".pattern." ".cd
+    let old_shellpipe = &shellpipe
+    try
+      "a hack for *nix to ensure the grep output isnt echoed in vim
+      let &shellpipe='&>'
+      exec "Ag! ".pattern." ".cd
+    finally
+      let &shellpipe = old_shellpipe
+    endtry
 endfunction
